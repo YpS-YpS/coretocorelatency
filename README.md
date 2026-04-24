@@ -1,12 +1,35 @@
 # Core-to-core latency benchmark + heatmap
 
 One-click core-to-core latency measurement on Windows with automatic heatmap
-generation. Wraps [nviennot/core-to-core-latency](https://github.com/nviennot/core-to-core-latency)
-(prebuilt v1.0.0) and the repo's own Jupyter-notebook visualization, exposed
-as a single `.bat` launcher.
+generation. Tested on a 16-logical-core Intel engineering sample; designed to
+scale to 28- and 52-core systems.
 
-Tested on a 16-logical-core Intel engineering sample; designed to scale to
-28- and 52-core systems.
+## Based on
+
+This project is a Windows-friendly wrapper around **Nicolas Viennot's**
+[nviennot/core-to-core-latency](https://github.com/nviennot/core-to-core-latency)
+— the Rust benchmark that actually measures the latency and the matplotlib
+notebook that renders the heatmaps. **All the hard work is his.** This repo
+adds:
+
+- `bin/core-to-core-latency.exe` — the official prebuilt v1.0.0 Windows
+  binary from [nviennot's releases](https://github.com/nviennot/core-to-core-latency/releases/tag/v1.0.0)
+  (unmodified).
+- `tools/plot_heatmap.py` — CLI wrapper around the `load_data` and
+  `show_heapmap` functions copied **verbatim** from
+  [`results/results.ipynb`](https://github.com/nviennot/core-to-core-latency/blob/main/results/results.ipynb)
+  in the upstream repo (cells 0-1). Only adaptations: `plt.cm.get_cmap`
+  replaced with `plt.get_cmap` (matplotlib 3.9+ deprecation), and a
+  `--iters`/`--samples` caption flow-through.
+- `start.bat` — a one-click launcher that chains exe → CSV → PNG → viewer.
+- `tools/compare_heatmaps.py`, `tools/run_sweep.ps1` — helpers for
+  multi-config sweeps.
+- Figure auto-sizing and per-cell annotation thresholds so the plotter
+  scales gracefully from 4-core laptops to 52-core servers.
+
+Distributed under the same **MIT license** as the upstream — see
+[`LICENSE`](LICENSE). If you use this, please star or credit the original
+repo; this wrapper is just packaging.
 
 ## Requirements
 
@@ -163,7 +186,11 @@ on its own directory (`%~dp0`) so relocating the whole folder is safe.
 
 ## Credits
 
-- Upstream benchmark: [nviennot/core-to-core-latency](https://github.com/nviennot/core-to-core-latency)
-  (MIT)
-- Visualization logic (`load_data`, `show_heapmap`) copied verbatim from the
-  upstream `results/results.ipynb`.
+All credit for the underlying measurement and visualization goes to **Nicolas
+Viennot** and contributors — see the "Based on" section at the top. This repo
+exists to make that work trivially runnable on a Windows machine without a
+Rust toolchain or Jupyter setup.
+
+- Upstream repo: <https://github.com/nviennot/core-to-core-latency> (MIT)
+- Exe: <https://github.com/nviennot/core-to-core-latency/releases/tag/v1.0.0>
+- Visualization source: <https://github.com/nviennot/core-to-core-latency/blob/main/results/results.ipynb>

@@ -1,8 +1,7 @@
 # Core-to-core latency benchmark + heatmap
 
 One-click core-to-core latency measurement on Windows with automatic heatmap
-generation. Tested on a 16-logical-core Intel engineering sample; designed to
-scale to 28- and 52-core systems.
+generation. 
 
 ## Based on
 
